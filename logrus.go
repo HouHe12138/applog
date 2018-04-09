@@ -2,7 +2,6 @@ package applog
 
 import (
 	"fmt"
-	//"log"
 	"strings"
 )
 

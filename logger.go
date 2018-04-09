@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+const CallPath = 3
+
 type Logger struct {
 	// The logs are `io.Copy`'d to this in a mutex. It's common to set this to a
 	// file, or leave it default which is `os.Stderr`. You can also set this to
@@ -150,7 +152,7 @@ func (l *Logger) Output(calldepth int, s string) error {
 func (l *Logger) Debugf(format string, args ...interface{}) {
 	if l.Level >= DebugLevel {
 		//fmt.Fprintf(l.Out, "[level=debug] "+format+"%s", args, "\n")
-		l.Output(3, fmt.Sprintf("[level=debug] "+format, args...)+"\n")
+		l.Output(CallPath, fmt.Sprintf("[level=debug] "+format, args...)+"\n")
 		//log.Printf("[level=debug] "+format, args, "\n")
 	}
 }
@@ -158,112 +160,112 @@ func (l *Logger) Debugf(format string, args ...interface{}) {
 func (l *Logger) Infof(format string, args ...interface{}) {
 	if l.Level >= InfoLevel {
 		//fmt.Fprintf(l.Out, "[level=info] "+format+"%s", args, "\n")
-		l.Output(3, fmt.Sprintf("[level=info] "+format, args...)+"\n")
+		l.Output(CallPath, fmt.Sprintf("[level=info] "+format, args...)+"\n")
 	}
 }
 
 func (l *Logger) Printf(format string, args ...interface{}) {
 	//fmt.Fprintf(l.Out, format+"%s", args, "\n")
-	l.Output(3, fmt.Sprintf(format+"%s", args...)+"\n")
+	l.Output(CallPath, fmt.Sprintf(format+"%s", args...)+"\n")
 }
 
 func (l *Logger) Warnf(format string, args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprintf(l.Out, "[level=warning] "+format+"%s", args, "\n")
-		l.Output(3, fmt.Sprintf("[level=warning] "+format, args...)+"\n")
+		l.Output(CallPath, fmt.Sprintf("[level=warning] "+format, args...)+"\n")
 	}
 }
 
 func (l *Logger) Warningf(format string, args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprintf(l.Out, "[level=warning] "+format+"%s", args, "\n")
-		l.Output(3, fmt.Sprintf("[level=warning] "+format, args...)+"\n")
+		l.Output(CallPath, fmt.Sprintf("[level=warning] "+format, args...)+"\n")
 	}
 }
 
 func (l *Logger) Errorf(format string, args ...interface{}) {
 	if l.Level >= ErrorLevel {
 		//fmt.Fprintf(l.Out, "[level=error] "+format+"%s", args, "\n")
-		l.Output(3, fmt.Sprintf("[level=error] "+format, args...)+"\n")
+		l.Output(CallPath, fmt.Sprintf("[level=error] "+format, args...)+"\n")
 	}
 }
 
 func (l *Logger) Debug(args ...interface{}) {
 	if l.Level >= DebugLevel {
 		//fmt.Fprint(l.Out, "[level=debug] ", args, "\n")
-		l.Output(3, "[level=debug] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=debug] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Info(args ...interface{}) {
 	if l.Level >= InfoLevel {
 		//fmt.Fprint(l.Out, "[level=info] ", args, "\n")
-		l.Output(3, "[level=info] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=info] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Print(args ...interface{}) {
 	//fmt.Fprint(l.Out, args, "\n")
-	l.Output(3, fmt.Sprintln(args...))
+	l.Output(CallPath, fmt.Sprintln(args...))
 }
 
 func (l *Logger) Warn(args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprint(l.Out, "[level=warning] ", args, "\n")
-		l.Output(3, "[level=warning] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=warning] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Warning(args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprint(l.Out, "[level=warning] ", args, "\n")
-		l.Output(3, "[level=warning] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=warning] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Error(args ...interface{}) {
 	if l.Level >= ErrorLevel {
 		//fmt.Fprint(l.Out, "[level=error] ", args, "\n")
-		l.Output(3, "[level=error] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=error] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Debugln(args ...interface{}) {
 	if l.Level >= DebugLevel {
 		//fmt.Fprintln(l.Out, "[level=debug] ", args)
-		l.Output(3, "[level=debug] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=debug] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Infoln(args ...interface{}) {
 	if l.Level >= InfoLevel {
 		//fmt.Fprintln(l.Out, "[level=info] ", args)
-		l.Output(3, "[level=info] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=info] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Println(args ...interface{}) {
 	//fmt.Fprintln(l.Out, args)
-	l.Output(3, fmt.Sprintln(args...))
+	l.Output(CallPath, fmt.Sprintln(args...))
 }
 
 func (l *Logger) Warnln(args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprintln(l.Out, "[level=warning] ", args)
-		l.Output(3, "[level=warning] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=warning] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Warningln(args ...interface{}) {
 	if l.Level >= WarnLevel {
 		//fmt.Fprintln(l.Out, "[level=warning] ", args)
-		l.Output(3, "[level=warning] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=warning] "+fmt.Sprintln(args...))
 	}
 }
 
 func (l *Logger) Errorln(args ...interface{}) {
 	if l.Level >= ErrorLevel {
 		//fmt.Fprintln(l.Out, "[level=error] ", args)
-		l.Output(3, "[level=error] "+fmt.Sprintln(args...))
+		l.Output(CallPath, "[level=error] "+fmt.Sprintln(args...))
 	}
 }

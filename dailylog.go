@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"time"
 
-	//"github.com/Sirupsen/logrus"
 	"github.com/robfig/cron"
 )
 
@@ -29,40 +28,27 @@ type AutoDailyLoger struct {
 func NewAutoDailyLoger(dir string, prefix string, level string) *AutoDailyLoger {
 	c := cron.New()
 	//init output 2006-01-02 15:04:05
-	name := fmt.Sprintf("%v.log", filepath.Join(dir, prefix+time.Now().Format("2006010215")))
+	name := fmt.Sprintf("%v.log", filepath.Join(dir, prefix+time.Now().Format("20060102")))
 	fmt.Println("dir = ", dir, " ,name = ", name)
 	os.MkdirAll(dir, 0777)
 	file, _ := os.OpenFile(name, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0755)
 
 	if file != nil {
-		//log.SetOutput(file)
-		//log.SetFlags(log.Llongfile | log.LstdFlags)
 		SetOutput(file)
-		lvl, err := ParseLevel(level)
-		if err == nil {
-			SetLevel(lvl)
-		}
-		SetFlags(Llongfile | LstdFlags)
 	}
+	lvl, err := ParseLevel(level)
+	if err == nil {
+		SetLevel(lvl)
+	}
+	SetFlags(Llongfile | LstdFlags)
 
-	//if file != nil {
-	//	logrus.SetOutput(file)
-	//	lvl, err := logrus.ParseLevel(level)
-	//	if err == nil {
-	//		logrus.SetLevel(lvl)
-	//	}
-	//	format := new(logrus.TextFormatter)
-	//	format.DisableColors = true
-	//	logrus.SetFormatter(format)
-	//}
-	//logrus.Info("NewAutoDailyLoger OK!!!")
 	s := &AutoDailyLoger{
 		dir:    dir,
 		prefix: prefix,
 		cron:   c,
 		file:   file,
 	}
-	c.AddFunc(SpecLogHours, s.changeLogerFile)
+	c.AddFunc(SpecLog, s.changeLogerFile)
 	return s
 }
 
@@ -86,28 +72,13 @@ func (s *AutoDailyLoger) changeLogerFile() {
 		s.file.Close()
 		s.file = nil
 	}
-	name := fmt.Sprintf("%v.log", filepath.Join(s.dir, s.prefix+time.Now().Format("2006010215")))
+	name := fmt.Sprintf("%v.log", filepath.Join(s.dir, s.prefix+time.Now().Format("20060102")))
 	os.MkdirAll(s.dir, 0777)
 	file, err := os.OpenFile(name, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0755)
 	fmt.Println("file error", file, file.Name(), err)
 	if file != nil {
-		//log.SetOutput(s.file)
-		//log.SetOutput(file)
-		//log.SetFlags(log.Llongfile | log.LstdFlags)
 		SetOutput(file)
 		s.file = file
-		lvl, err := ParseLevel(s.level)
-		if err == nil {
-			SetLevel(lvl)
-		}
-		SetFlags(Llongfile | LstdFlags)
-		//lvl, err := logrus.ParseLevel(s.level)
-		//if err == nil {
-		//	logrus.SetLevel(lvl)
-		//}
-		//format := new(logrus.TextFormatter)
-		//format.DisableColors = true
-		//logrus.SetFormatter(format)
 	}
 	Info("changeLogerFile OK!!!")
 }
